@@ -76,7 +76,7 @@ const ChatBot = () => {
         style={{
           bottom: 'calc(4rem + env(safe-area-inset-bottom))',
           right: '1.25rem',
-          '@media (min-width: 640px)': {
+          '@media (minWidth: 640px)': {
             bottom: '5rem',
             right: '2rem'
           }
