@@ -1,16 +1,19 @@
+import { Groq } from 'groq-sdk';
+
 let client = null;
+
 const MODEL = 'llama-3.3-70b-versatile';
-import Groq from 'groq-sdk';
 
 const initializeGroq = async () => {
   if (!client) {
     client = new Groq({
       apiKey: import.meta.env.VITE_GROQ_API_KEY,
-      dangerouslyAllowBrowser: true
+      dangerouslyAllowBrowser: true,
     });
   }
   return client;
 };
+
 
 const chatTools = [{
   type: "function",

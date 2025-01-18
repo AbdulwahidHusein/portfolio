@@ -1,13 +1,12 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['groq-sdk'], // Ensure it's pre-bundled
+    include: ['groq-sdk'],
   },
   build: {
     target: 'esnext',
-    rollupOptions: {
-      // Remove `external: ['groq-sdk']`
-    },
   },
 });
- 
