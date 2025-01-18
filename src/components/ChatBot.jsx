@@ -94,7 +94,7 @@ const ChatBot = () => {
               if (messages.length === 0) {
                 setMessages([{ 
                   type: 'bot', 
-                  content: "Hi there! 👋 I'm Wahida, your AI companion. How can I assist you today?" 
+                  content: "Hi there! 👋 " 
                 }]);
               }
             }}
