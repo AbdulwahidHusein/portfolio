@@ -1,11 +1,16 @@
-const { Groq } = await import('groq-sdk');
-
-const client = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
+let client = null;
 const MODEL = 'llama-3.3-70b-versatile';
+
+const initializeGroq = async () => {
+  if (!client) {
+    const { Groq } = await import('groq-sdk');
+    client = new Groq({
+      apiKey: import.meta.env.VITE_GROQ_API_KEY,
+      dangerouslyAllowBrowser: true
+    });
+  }
+  return client;
+};
 
 const chatTools = [{
   type: "function",
@@ -39,6 +44,9 @@ const chatTools = [{
 
 const handleChat = async (userMessage, chatHistory) => {
   try {
+    // Initialize Groq client if not already initialized
+    await initializeGroq();
+    
     const messages = [
       {
         role: "system",

@@ -6,5 +6,11 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['groq-sdk']
+  },
+  build: {
+    target: 'esnext',
+    rollupOptions: {
+      external: ['groq-sdk'],
+    }
   }
 })
