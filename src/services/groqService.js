@@ -45,6 +45,34 @@ const chatTools = [{
   }
 }];
 
+const sendTelegramMessage = async (message) => {
+  const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+  const TELEGRAM_USER_ID = import.meta.env.VITE_TELEGRAM_USER_ID;
+  
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_USER_ID,
+        text: message,
+        parse_mode: 'HTML'
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to send Telegram message');
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Telegram sending error:', error);
+    return false;
+  }
+};
+
 const handleChat = async (userMessage, chatHistory) => {
   try {
     // Initialize Groq client if not already initialized
@@ -100,14 +128,20 @@ Your role as Wahida is to make it easy for users to connect with Abdulwahid whil
       const toolCall = message.tool_calls[0];
       const args = JSON.parse(toolCall.function.arguments);
       
-      // Log the message (simulating forwarding)
-      console.log('Chat Interaction Data:', {
-        name: args.name,
-        contact: args.contact,
-        message: args.message,
-        conversation_history: args.conversation_history,
-        timestamp: new Date().toISOString()
-      });
+      // Format and send message via Telegram
+      const formattedMessage = `
+<b>New Portfolio Contact</b>
+
+<b>Name:</b> ${args.name}
+<b>Contact:</b> ${args.contact}
+<b>Message:</b> ${args.message}
+
+<b>Conversation History:</b>
+${args.conversation_history}
+
+<i>Timestamp: ${new Date().toISOString()}</i>`;
+
+      await sendTelegramMessage(formattedMessage);
 
       return {
         content: message.content || "Perfect! I've passed along your information to Abdulwahid. He'll get back to you soon!",
